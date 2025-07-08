@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>شركة النجاح - إدارة المالية</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>💼 شركة النجاح - نظام إدارة المالية</h1>
+    <button id="toggleTheme" class="btn btn-toggle">🌓 تبديل الوضع</button>
+    <button id="logoutBtn" class="btn btn-logout">🚪 تسجيل الخروج</button>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="#home">🏠 الرئيسية</a></li>
+      <li><a href="#reports">📊 التقارير</a></li>
+      <li><a href="#transactions">💳 المعاملات</a></li>
+      <li><a href="#add-report">➕ إضافة تقرير</a></li>
+    </ul>
+  </nav>
+
+  <main style="display: none;">
+    <section id="home" class="dashboard">
+      <h2>نظرة عامة على المالية</h2>
+      <div class="summary">
+        <div class="box income" id="incomeBox">الدخل: 0 جنيه</div>
+        <div class="box expense" id="expenseBox">المصروفات: 0 جنيه</div>
+        <div class="box profit" id="profitBox">الأرباح: 0 جنيه</div>
+      </div>
+      <canvas id="financeChart" class="finance-chart" width="400" height="200"></canvas>
+    </section>
+
+    <section id="reports">
+      <h2>📁 التقارير المالية</h2>
+      <div class="report-container">
+<button class="btn btn-export" onclick="exportToCSV()">💾 تصدير إلى Excel</button>
+<button class="btn btn-export" onclick="generatePDF()">📄 تحميل PDF</button>
+<button class="btn btn-export" onclick="exportToJSON()">📦 حفظ نسخة JSON</button>
+<button class="btn btn-danger" onclick="resetData()">🗑️ مسح جميع البيانات</button>
+        <ul class="report-list" id="reportList">
+        </ul>
+      </div>
+    </section>
+
+    <div id="toast" class="toast"></div>
+
+    <section id="transactions">
+      <h2>📅 جدول المعاملات</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>📆 التاريخ</th>
+              <th>📄 الوصف</th>
+              <th>💰 المبلغ</th>
+              <th>🔖 النوع</th>
+            </tr>
+          </thead>
+          <tbody id="transactionTable">
+            <!-- المعاملات تضاف تلقائياً هنا -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="add-report">
+      <h2>📝 إضافة تقرير مالي جديد</h2>
+      <form id="reportForm">
+        <label for="monthInput">📅 الشهر:</label>
+        <input type="text" id="monthInput" placeholder="مثال: يوليو">
+
+        <label for="incomeInput">💰 الدخل:</label>
+        <input type="number" id="incomeInput" placeholder="150000">
+
+        <label for="expenseInput">💸 المصروفات:</label>
+        <input type="number" id="expenseInput" placeholder="75000">
+
+        <button type="submit">➕ أضف التقرير</button>
+      </form>
+    </section>
+  </main>
+
+  <section id="login" class="login-section">
+    <h2>🔐 تسجيل الدخول</h2>
+    <form id="loginForm">
+      <label for="username">👤 اسم المستخدم:</label>
+      <input type="text" id="username" placeholder="admin">
+
+      <label for="password">🔑 كلمة المرور:</label>
+      <input type="password" id="password" placeholder="1234">
+
+      <button type="submit">✅ دخول</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>© 2025 شركة النجاح. جميع الحقوق محفوظة.</p>
+  </footer>
+
+  <audio id="sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_7fa00b299e.mp3"></audio>
+  <script src="main.js"></script>
+</body>
+</html>
