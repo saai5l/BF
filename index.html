@@ -3,17 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>شركة النجاح - إدارة المالية</title>
+  <title>Bright Future - إدارة المالية</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script defer src="main.js"></script>
 </head>
 <body>
   <header>
-    <h1>💼 شركة النجاح - نظام إدارة المالية</h1>
-    <button id="toggleTheme" class="btn btn-toggle">🌓 تبديل الوضع</button>
-    <button id="logoutBtn" class="btn btn-logout">🚪 تسجيل الخروج</button>
+    <h1>🌟 Bright Future - نظام إدارة المالية</h1>
+    <div class="header-actions">
+      <button id="toggleTheme" class="btn btn-toggle">🌓 تبديل الوضع</button>
+      <button id="logoutBtn" class="btn btn-logout">🚪 تسجيل الخروج</button>
+    </div>
   </header>
 
   <nav>
@@ -22,29 +25,42 @@
       <li><a href="#reports">📊 التقارير</a></li>
       <li><a href="#transactions">💳 المعاملات</a></li>
       <li><a href="#add-report">➕ إضافة تقرير</a></li>
+      <li><a href="#tips">💡 نصائح</a></li>
+      <li><a href="#about">ℹ️ عن النظام</a></li>
     </ul>
   </nav>
 
   <main style="display: none;">
     <section id="home" class="dashboard">
-      <h2>نظرة عامة على المالية</h2>
+      <h2>✨ نظرة عامة على المالية</h2>
       <div class="summary">
-        <div class="box income" id="incomeBox">الدخل: 0 جنيه</div>
-        <div class="box expense" id="expenseBox">المصروفات: 0 جنيه</div>
-        <div class="box profit" id="profitBox">الأرباح: 0 جنيه</div>
+        <div class="box income" id="incomeBox">💰 الدخل: 0 جنيه</div>
+        <div class="box expense" id="expenseBox">💸 المصروفات: 0 جنيه</div>
+        <div class="box profit" id="profitBox">📈 الأرباح: 0 جنيه</div>
+        <div class="box ratio" id="profitRatio">📊 نسبة الربح: 0%</div>
       </div>
       <canvas id="financeChart" class="finance-chart" width="400" height="200"></canvas>
     </section>
 
     <section id="reports">
       <h2>📁 التقارير المالية</h2>
+      <div class="filter-container">
+        <input type="text" id="filterInput" placeholder="🔍 بحث...">
+        <select id="filterType">
+          <option value="">الكل</option>
+          <option value="شهري">شهري</option>
+          <option value="أسبوعي">أسبوعي</option>
+          <option value="يومي">يومي</option>
+        </select>
+      </div>
       <div class="report-container">
-<button class="btn btn-export" onclick="exportToCSV()">💾 تصدير إلى Excel</button>
-<button class="btn btn-export" onclick="generatePDF()">📄 تحميل PDF</button>
-<button class="btn btn-export" onclick="exportToJSON()">📦 حفظ نسخة JSON</button>
-<button class="btn btn-danger" onclick="resetData()">🗑️ مسح جميع البيانات</button>
-        <ul class="report-list" id="reportList">
-        </ul>
+        <div class="button-group">
+          <button class="btn btn-export" onclick="exportToCSV()">💾 تصدير إلى Excel</button>
+          <button class="btn btn-export" onclick="generatePDF()">📄 تحميل PDF</button>
+          <button class="btn btn-export" onclick="exportToJSON()">📦 حفظ نسخة JSON</button>
+          <button class="btn btn-danger" onclick="resetData()">🗑️ مسح جميع البيانات</button>
+        </div>
+        <ul class="report-list" id="reportList"></ul>
       </div>
     </section>
 
@@ -62,9 +78,7 @@
               <th>🔖 النوع</th>
             </tr>
           </thead>
-          <tbody id="transactionTable">
-            <!-- المعاملات تضاف تلقائياً هنا -->
-          </tbody>
+          <tbody id="transactionTable"></tbody>
         </table>
       </div>
     </section>
@@ -81,7 +95,17 @@
         <label for="expenseInput">💸 المصروفات:</label>
         <input type="number" id="expenseInput" placeholder="75000">
 
-        <button type="submit">➕ أضف التقرير</button>
+        <label for="reportNote">🗒️ ملاحظات:</label>
+        <textarea id="reportNote" placeholder="أدخل أي ملاحظات حول هذا الشهر..."></textarea>
+
+        <label for="reportType">📌 نوع التقرير:</label>
+        <select id="reportType" required>
+          <option value="يومي">📆 يومي</option>
+          <option value="أسبوعي">📅 أسبوعي</option>
+          <option value="شهري" selected>🗓️ شهري</option>
+        </select>
+
+        <button type="submit" class="btn btn-add">➕ أضف التقرير</button>
       </form>
     </section>
   </main>
@@ -95,15 +119,31 @@
       <label for="password">🔑 كلمة المرور:</label>
       <input type="password" id="password" placeholder="1234">
 
-      <button type="submit">✅ دخول</button>
+      <button type="submit" class="btn btn-login">✅ دخول</button>
     </form>
   </section>
 
+  <section id="tips" class="extra-section">
+    <h2>📈 نصائح مالية</h2>
+    <ul>
+      <li>✅ حافظ على تقاريرك محدثة باستمرار.</li>
+      <li>🧮 قم بتحليل المصروفات لتحديد مصادر التوفير.</li>
+      <li>🔁 صدّر نسخة احتياطية قبل كل تعديل كبير.</li>
+      <li>📊 استعرض الرسوم البيانية لتقدير الأداء المالي.</li>
+    </ul>
+  </section>
+
+  <section id="about" class="extra-section">
+    <h2>ℹ️ عن النظام</h2>
+    <p>
+      Bright Future هو نظام مبسط لإدارة التقارير المالية مخصص للأفراد والشركات الصغيرة، يتيح لك تتبع الدخل والمصروفات، وإصدار تقارير شهرية، وتحليل الأداء المالي باستخدام الرسوم البيانية التفاعلية.
+    </p>
+  </section>
+
   <footer>
-    <p>© 2025 شركة النجاح. جميع الحقوق محفوظة.</p>
+    <p>© 2025 Bright Future. جميع الحقوق محفوظة.</p>
   </footer>
 
   <audio id="sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_7fa00b299e.mp3"></audio>
-  <script src="main.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-/* style.css - تصميم عصري فاخر ومحسّن + تحسينات إضافية */
+/* style.css - تصميم عصري فاخر ومحسّن */
 body {
   margin: 0;
   font-family: 'Cairo', sans-serif;
@@ -15,19 +15,19 @@ body.dark-mode {
 header {
   background: linear-gradient(to right, #34495e, #2c3e50);
   color: white;
-  padding: 25px;
-  text-align: center;
-  font-size: 26px;
+  padding: 25px 20px;
+  font-size: 24px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
   animation: fadeInDown 1s ease;
-  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 4px solid #16a085;
 }
 
-#toggleTheme {
-  position: absolute;
-  left: 20px;
-  top: 25px;
+.header-actions {
+  display: flex;
+  gap: 10px;
 }
 
 nav {
@@ -255,9 +255,8 @@ footer {
   opacity: 1;
 }
 
-/* تنسيق موحد لكل الأزرار */
 .btn {
-  padding: 10px 12px;
+  padding: 10px 14px;
   font-size: 16px;
   font-family: 'Cairo', sans-serif;
   border: none;
@@ -294,4 +293,111 @@ body.dark-mode .btn-toggle { background-color: #444; color: #fff; }
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* واجهة إضافة تقرير محسّنة */
+#add-report h2::after {
+  content: " 🚀";
+  animation: floatIcon 2s infinite ease-in-out;
+  display: inline-block;
+}
+
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+#add-report h2 {
+  text-shadow: 0 0 8px rgba(22, 160, 133, 0.5);
+  letter-spacing: 1px;
+}
+
+#add-report form {
+  background: linear-gradient(to bottom right, #ffffff, #f1faff);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 40px auto;
+  animation: fadeInUp 1s ease;
+  transition: all 0.3s ease;
+}
+
+#add-report form:hover {
+  background: linear-gradient(135deg, #f1faff, #ffffff, #f1faff);
+  background-size: 400% 400%;
+  animation: lightGlow 3s ease infinite;
+}
+
+@keyframes lightGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body.dark-mode #add-report form {
+  background: linear-gradient(to bottom right, #1f1f1f, #2a2a2a);
+  color: #fff;
+}
+
+#add-report form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+body.dark-mode #add-report form label {
+  color: #ddd;
+}
+
+#add-report form input,
+#add-report form textarea,
+#add-report form select {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+body.dark-mode #add-report form input,
+body.dark-mode #add-report form textarea,
+body.dark-mode #add-report form select {
+  background-color: #2c2c2c;
+  border: 1px solid #444;
+  color: #eee;
+}
+
+#add-report form input:focus,
+#add-report form textarea:focus,
+#add-report form select:focus {
+  border-color: #16a085;
+  box-shadow: 0 0 6px rgba(22, 160, 133, 0.4);
+  outline: none;
+}
+
+#add-report form button {
+  background-color: #16a085;
+  color: white;
+  padding: 14px;
+  font-size: 18px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  width: 100%;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+#add-report form button:hover {
+  background-color: #138d75;
+  transform: scale(1.03);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
 }

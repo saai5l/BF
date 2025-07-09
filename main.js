@@ -69,8 +69,8 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 
 // ===== تحميل البيانات المحفوظة
 function loadData() {
-  reports.forEach(({ month, income, expense }) => {
-    appendReport(month, income, expense);
+  reports.forEach(({ month, income, expense, type }) => {
+    appendReport(month, income, expense, type);
     totalIncome += income;
     totalExpense += expense;
   });
@@ -87,20 +87,21 @@ document.getElementById("reportForm").addEventListener("submit", function (e) {
   const month = document.getElementById("monthInput").value;
   const income = +document.getElementById("incomeInput").value;
   const expense = +document.getElementById("expenseInput").value;
+  const type = document.getElementById("reportType").value;
 
   if (!month || isNaN(income) || isNaN(expense)) {
     showToast("❗ يرجى تعبئة الحقول بشكل صحيح", "#f39c12");
     return;
   }
 
-  reports.push({ month, income, expense });
+  reports.push({ month, income, expense, type });
   localStorage.setItem("reports", JSON.stringify(reports));
-  appendReport(month, income, expense);
+  appendReport(month, income, expense, type);
 
   const today = new Date().toLocaleDateString();
-  transactions.push({ date: today, desc: `تقرير ${month}`, amount: income - expense, type: "تقرير" });
+  transactions.push({ date: today, desc: `تقرير ${month} (${type})`, amount: income - expense, type: "تقرير" });
   localStorage.setItem("transactions", JSON.stringify(transactions));
-  appendTransaction(today, `تقرير ${month}`, income - expense, "تقرير");
+  appendTransaction(today, `تقرير ${month} (${type})`, income - expense, "تقرير");
 
   totalIncome += income;
   totalExpense += expense;
@@ -121,9 +122,9 @@ function updateDashboard() {
 }
 
 // ===== إضافة تقرير في القائمة
-function appendReport(month, income, expense) {
+function appendReport(month, income, expense, type = "شهري") {
   const li = document.createElement("li");
-  li.textContent = `📅 ${month} - 💰 الدخل: ${income} جنيه - 💸 المصروفات: ${expense} جنيه`;
+  li.textContent = `📅 ${month} (${type}) - 💰 الدخل: ${income} جنيه - 💸 المصروفات: ${expense} جنيه`;
   document.getElementById("reportList").appendChild(li);
 }
 
@@ -168,9 +169,9 @@ function drawChart() {
 
 // ===== تصدير إلى CSV
 function exportToCSV() {
-  let csv = "الشهر,الدخل,المصروفات\n";
+  let csv = "الشهر,نوع التقرير,الدخل,المصروفات\n";
   reports.forEach(r => {
-    csv += `${r.month},${r.income},${r.expense}\n`;
+    csv += `${r.month},${r.type},${r.income},${r.expense}\n`;
   });
 
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -190,7 +191,7 @@ function generatePDF() {
   let y = 30;
 
   reports.forEach((r, i) => {
-    doc.text(`• ${r.month} - دخل: ${r.income} | مصروفات: ${r.expense}`, 10, y);
+    doc.text(`• ${r.month} (${r.type}) - دخل: ${r.income} | مصروفات: ${r.expense}`, 10, y);
     y += 10;
   });
 
@@ -216,3 +217,15 @@ function resetData() {
     location.reload();
   }
 }
+
+// إرسال تقرير
+fetch('http://localhost:3000/reports', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ month: "يوليو", income: 1000, expense: 500 })
+});
+
+// جلب كل التقارير
+fetch('http://localhost:3000/reports')
+  .then(res => res.json())
+  .then(data => console.log(data));
